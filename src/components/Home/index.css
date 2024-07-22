@@ -1,0 +1,15 @@
+.home {
+  margin: 20px;
+}
+
+.home form {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.seating {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
