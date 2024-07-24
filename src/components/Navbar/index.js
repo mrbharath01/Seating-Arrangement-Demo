@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./index.css";
 
-function Navbar() {
+const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -13,16 +13,18 @@ function Navbar() {
       <div className="navbar-right">
         <div className="align">
           <Link to="/login" className="navbar-link">
-            Login
+            Profile
           </Link>
           <Link to="/register" className="navbar-link">
-            Register
+            History
+          </Link>
+          <Link to="/register" className="navbar-link">
+            Log-out
           </Link>
         </div>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
-

@@ -1,23 +1,20 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import RegisterForm from "./components/RegisterForm/index";
-import LoginForm from "./components/LoginForm/index";
-import Home from "./components/Home/index";
-import Navbar from "./components/Navbar/index";
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
+import SeatSelection from "./components/SeatBooking/SeatSelection";
+import './styles/SeatBooking.css';
 
-function App() {
+
+export default function App() {
   return (
-    <Router>
-      <Navbar />
-      <div className="main-content">
-        <Route path="/register" component={RegisterForm} />
-        <Route path="/login" component={LoginForm} />
-        <Route path="/home" component={Home} />
-        <Redirect from="/" to="/home" />
-      </div>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/seats" element={<SeatSelection />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

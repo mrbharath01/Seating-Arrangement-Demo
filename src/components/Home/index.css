@@ -1,5 +1,5 @@
 .home {
-  margin: 20px;
+  margin: 3% 10% 3% 10%;
 }
 
 .home form {
@@ -12,4 +12,15 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
+}
+
+.hello{
+  background-color: #ffffff ;
+}
+
+.date-zone{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
 }
