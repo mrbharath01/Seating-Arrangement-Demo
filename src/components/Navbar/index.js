@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -12,13 +15,17 @@ const Navbar = () => {
       </div>
       <div className="navbar-right">
         <div className="align">
-          <Link to="/login" className="navbar-link">
+          <Link to="/profile" className="navbar-link">
             Profile
           </Link>
-          <Link to="/register" className="navbar-link">
+          <Link to="/history" className="navbar-link">
             History
           </Link>
-          <Link to="/register" className="navbar-link">
+          <Link
+            to="/login"
+            className="navbar-link"
+            onClick={() => navigate("/login")}
+          >
             Log-out
           </Link>
         </div>
@@ -28,4 +35,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
