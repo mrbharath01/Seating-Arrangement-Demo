@@ -1,51 +1,131 @@
+// import React, { useState } from "react";
+// import "./index.css";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+
+// const LoginForm = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [message, setMessage] = useState("");
+//   const navigate = useNavigate();
+
+//   const handleNav = (e) => {
+//     navigate("/register");
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (email && password) {
+//       try {
+//         await axios.post("http://localhost:5000/login", {
+//           username: email,
+//           password,
+//         });
+//         setMessage("Login successful!");
+//         navigate("/"); // Redirect to home or any other route
+//       } catch (error) {
+//         setMessage("Login failed.");
+//         console.error("Login failed:", error);
+//       }
+//     } else {
+//       setMessage("Please fill in all fields.");
+//     }
+//   };
+
+//   return (
+//     <div className="login-main">
+//       <div className="login-container">
+//         <h2 className="login-title">Login</h2>
+//         {message && <p className="login-message">{message}</p>}
+//         <form onSubmit={handleSubmit} className="login-form">
+//           <div className="form-group">
+//             <input
+//               type="email"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               className="form-input"
+//               required
+//             />
+//             <label className="form-label">Email</label>
+//           </div>
+//           <div className="form-group">
+//             <input
+//               type="password"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               className="form-input"
+//               required
+//             />
+//             <label className="form-label">Password</label>
+//           </div>
+//           <button type="submit" className="form-button">
+//             Login
+//           </button>
+//         </form>
+//         <div className="register-link">
+//           Not a member?{" "}
+//           <button className="register-btn" onClick={handleNav}>
+//             Register
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default LoginForm;
+
 import React, { useState } from "react";
-import "./index.css";
-import "../../styles/SeatBooking.css";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import "./index.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-
+  const [showErrorMsg, setShowErrorMsg] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [check, setCheck] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('http://localhost:5000/logout', {
-        cookie: cookies.user,
-      });
-      removeCookie('user', { path: '/' });
-      navigate("/");
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+  const onSubmitSuccess = (jwtToken) => {
+    Cookies.set("jwt_token", jwtToken, { expires: 30 });
+    navigate("/");
   };
 
-  const handleNav = (e) => {
-    navigate("/register");
+  const onSubmitFailure = (error) => {
+    setShowErrorMsg(true);
+    setErrorMsg(error);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const checkClicked = () => {
+    setCheck((prevState) => !prevState);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (email && password) {
       try {
-        const response = await axios.post("http://localhost:3000/login", {
+        const response = await axios.post("http://localhost:5000/login", {
           username: email,
           password,
         });
-        setCookie("user", response.data.cookie, { path: "/" });
-        setMessage("Login successful!");
-        navigate("/seats");
+        onSubmitSuccess(response.data.jwt_token);
       } catch (error) {
-        setMessage("Login failed. Please check your credentials.");
+        onSubmitFailure("Login failed.");
         console.error("Login failed:", error);
       }
     } else {
-      setMessage("Please fill in all fields.");
+      onSubmitFailure("Please fill in all fields.");
     }
   };
 
@@ -53,38 +133,55 @@ const LoginForm = () => {
     <div className="login-main">
       <div className="login-container">
         <h2 className="login-title">Login</h2>
-        {message && <p className="login-message">{message}</p>}
+        {showErrorMsg && <p className="login-message">* {errorMsg}</p>}
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email
+            </label>
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
               className="form-input"
+              id="email"
+              placeholder="Email"
               required
             />
-            <label className="form-label">User Id</label>
           </div>
           <div className="form-group">
+            <label className="form-label" htmlFor="password">
+              Password
+            </label>
             <input
-              type="password"
+              type={check ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
               className="form-input"
+              id="password"
+              placeholder="Password"
               required
             />
-            <label className="form-label">Password</label>
           </div>
-          <div className="forgot-password">
-            <a href="#">Forget Password?</a>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              id="check"
+              onClick={checkClicked}
+              checked={check}
+            />
+            <label htmlFor="check">Show Password</label>
           </div>
           <button type="submit" className="form-button">
             Login
           </button>
         </form>
-        <div className="signup-link">
-          Not a Member?{" "}
-          <button className="register-btn" onClick={handleNav}>
+        <div className="register-link">
+          Not a member?{" "}
+          <button
+            className="register-btn"
+            onClick={() => navigate("/register")}
+          >
             Register
           </button>
         </div>

@@ -15,6 +15,11 @@ const SeatIcon = ({ isBooked, seatNumber }) => (
             {seatNumber}
         </text>
     </svg>
+
+
 );
 
 export default SeatIcon;
+
+
+
