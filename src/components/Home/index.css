@@ -10,15 +10,15 @@
 
 .seating {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(10, 1fr);
   gap: 10px;
 }
 
-.hello{
-  background-color: #ffffff ;
+.hello {
+  background-color: #ffffff;
 }
 
-.date-zone{
+.date-zone {
   display: flex;
   flex-direction: row;
   justify-content: space-around;

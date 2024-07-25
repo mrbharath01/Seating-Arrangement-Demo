@@ -1,8 +1,7 @@
 import React from "react";
-import "./index.css";
 
-function Seat({ number }) {
-  return <div className="seat">{number}</div>;
-}
+const Seat = ({ seat }) => {
+  return <div className={`seat ${seat.status}`}>{seat.id}</div>;
+};
 
 export default Seat;
